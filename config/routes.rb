@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :repetitions
+  resources :activities
+  resources :blocks
+  resources :groups
+  resources :sections
   resources :equipment
   resources :exercises
   resources :muscles
