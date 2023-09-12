@@ -1,2 +1,0 @@
-class RepetitionsController < ApplicationController
-end
