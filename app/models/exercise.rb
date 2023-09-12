@@ -6,6 +6,9 @@ class Exercise < ApplicationRecord
     has_and_belongs_to_many :equipment
 
     validates :name, presence: true
+    validates :instructions, presence: true
+    validates :category, presence: true
+    validates :difficulty, presence: true
 
     def self.get_categories
         categories.keys.map(&:to_str).map(&:capitalize)
