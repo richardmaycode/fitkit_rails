@@ -4,6 +4,7 @@ class Exercise < ApplicationRecord
 
     has_and_belongs_to_many :muscles
     has_and_belongs_to_many :equipment
+    has_many :activities
 
     validates :name, presence: true
     validates :instructions, presence: true

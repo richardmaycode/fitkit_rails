@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :plans
+  resources :routines
   resources :repetitions
   resources :activities
   resources :blocks

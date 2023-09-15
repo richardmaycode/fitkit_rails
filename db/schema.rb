@@ -16,19 +16,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_012006) do
 
   create_table "activities", force: :cascade do |t|
     t.text "comments"
-    t.bigint "blocks_id", null: false
+    t.integer "targetHeartRateZone"
+    t.float "rest_time"
+    t.bigint "block_id", null: false
+    t.bigint "exercise_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["blocks_id"], name: "index_activities_on_blocks_id"
+    t.index ["block_id"], name: "index_activities_on_block_id"
+    t.index ["exercise_id"], name: "index_activities_on_exercise_id"
   end
 
   create_table "blocks", force: :cascade do |t|
     t.integer "block_type", default: 0, null: false
     t.text "comments"
-    t.bigint "groups_id", null: false
+    t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["groups_id"], name: "index_blocks_on_groups_id"
+    t.index ["group_id"], name: "index_blocks_on_group_id"
   end
 
   create_table "equipment", force: :cascade do |t|
@@ -67,6 +71,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_012006) do
   create_table "groups", force: :cascade do |t|
     t.integer "repeats", default: 0, null: false
     t.float "rest_time", default: 0.0, null: false
+    t.integer "target_heart_rate_zone"
     t.bigint "section_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -75,6 +80,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_012006) do
 
   create_table "muscles", force: :cascade do |t|
     t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -92,19 +104,35 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_012006) do
     t.index ["activity_id"], name: "index_repetitions_on_activity_id"
   end
 
+  create_table "routines", force: :cascade do |t|
+    t.string "name"
+    t.text "summary"
+    t.integer "status"
+    t.bigint "plan_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_routines_on_plan_id"
+  end
+
   create_table "sections", force: :cascade do |t|
     t.string "name", null: false
     t.text "comments"
+    t.integer "section_index", default: 0, null: false
+    t.bigint "routine_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["routine_id"], name: "index_sections_on_routine_id"
   end
 
-  add_foreign_key "activities", "blocks", column: "blocks_id"
-  add_foreign_key "blocks", "groups", column: "groups_id"
+  add_foreign_key "activities", "blocks"
+  add_foreign_key "activities", "exercises"
+  add_foreign_key "blocks", "groups"
   add_foreign_key "equipment_exercises", "equipment"
   add_foreign_key "equipment_exercises", "exercises"
   add_foreign_key "exercises_muscles", "exercises"
   add_foreign_key "exercises_muscles", "muscles"
   add_foreign_key "groups", "sections"
   add_foreign_key "repetitions", "activities"
+  add_foreign_key "routines", "plans"
+  add_foreign_key "sections", "routines"
 end
